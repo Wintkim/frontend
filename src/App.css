@@ -1,0 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+* {
+  cursor: none !important;
+}
+
+@media (max-width: 768px) {
+  * {
+    cursor: auto !important;
+  }
+}
+
+body {
+  font-family: "Noto Sans KR", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #c0ebff;
+  color: #fff;
+}
+
+.App {
+  min-height: 100vh;
+  width: 100%;
+}
