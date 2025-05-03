@@ -1,243 +1,196 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import ReactPlayer from "react-player";
-import ScrollAnimation from "../animations/ScrollAnimation";
+import brandVideo from "../../assets/videos/brand-5s.mp4";
+import corporateVideo from "../../assets/videos/corporate-5s.mp4";
+import docuVideo from "../../assets/videos/docu-5s.mp4";
+import reportVideo from "../../assets/videos/report-5s.mp4";
+import thumb1 from "../../assets/images/thumbnail1.jpg";
+import thumb2 from "../../assets/images/thumbnail2.jpg";
+import thumb3 from "../../assets/images/thumbnail3.jpg";
+import thumb4 from "../../assets/images/thumbnail4.jpg";
+
+const portfolioItems = [
+  {
+    id: 1,
+    title: "브랜드 필름",
+    subtitle: "감각적인 브랜드 스토리",
+    description:
+      "하이엔드 브랜드 MCM과의 문화 프로젝트, 브랜드의 감성과 철학을 섬세하게 영상으로 구현했습니다.",
+    video: brandVideo,
+    thumbnail: thumb1,
+  },
+  {
+    id: 3,
+    title: "다큐멘터리",
+    subtitle: "진정성 있는 스토리텔링",
+    description:
+      "유럽과 한국을 잇는 사람들의 이야기, 현실과 감정을 담아낸 깊이 있는 영상 기록.",
+    video: docuVideo,
+    thumbnail: thumb3,
+  },
+  {
+    id: 4,
+    title: "방송 리포트",
+    subtitle: "현장의 생생한 순간",
+    description:
+      "방송 리포팅 및 현지 코디네이팅의 오랜 경험 기반으로, 빠르고 정확하게 글로벌 현장을 전달합니다.",
+    video: reportVideo,
+    thumbnail: thumb2,
+  },
+  {
+    id: 2,
+    title: "기업 홍보영상",
+    subtitle: "기업의 비전과 가치",
+    description:
+      "기업의 철학, 미래를 전략적으로 담아내며, 스토리텔링 중심의 브랜딩 콘텐츠를 제작합니다.",
+    video: corporateVideo,
+    thumbnail: thumb4,
+  },
+];
 
 const PortfolioSection = () => {
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [hoveredItem, setHoveredItem] = useState(null);
-  const [selectedVideo, setSelectedVideo] = useState(null);
-
-  // 임시 포트폴리오 데이터
-  const portfolioItems = [
-    {
-      id: 1,
-      title: "브랜드 홍보영상",
-      category: "corporate",
-      thumbnail: "https://example.com/thumbnail1.jpg",
-      videoUrl: "https://example.com/video1.mp4",
-      description: "기업의 브랜드 가치를 담아낸 홍보영상",
-    },
-    {
-      id: 2,
-      title: "방송 다큐멘터리",
-      category: "broadcast",
-      thumbnail: "https://example.com/thumbnail2.jpg",
-      videoUrl: "https://example.com/video2.mp4",
-      description: "자연 다큐멘터리 작업",
-    },
-    // 나중에 더 많은 포트폴리오 항목 추가 예정
-  ];
-
-  const categories = [
-    { id: "all", name: "전체" },
-    { id: "broadcast", name: "방송 촬영" },
-    { id: "coordination", name: "방송 현지 코디" },
-    { id: "corporate", name: "기업 영상" },
-    { id: "shortfilm", name: "단편 영화" },
-  ];
-
-  const filteredItems =
-    selectedCategory === "all"
-      ? portfolioItems
-      : portfolioItems.filter((item) => item.category === selectedCategory);
+  const [hoveredId, setHoveredId] = useState(null);
 
   return (
     <SectionContainer id="portfolio">
-      <ScrollAnimation>
-        <SectionTitle>Portfolio</SectionTitle>
-      </ScrollAnimation>
-
-      <CategoryFilter>
-        {categories.map((category) => (
-          <ScrollAnimation key={category.id} delay={0.1}>
-            <CategoryButton
-              isSelected={selectedCategory === category.id}
-              onClick={() => setSelectedCategory(category.id)}
+      <Title>PORTFOLIO</Title>
+      <FlexContainer>
+        {portfolioItems.map((item) => (
+          <PortfolioItem key={item.id}>
+            <VideoContainer
+              onMouseEnter={() => setHoveredId(item.id)}
+              onMouseLeave={() => setHoveredId(null)}
+              isHovered={hoveredId === item.id}
             >
-              {category.name}
-            </CategoryButton>
-          </ScrollAnimation>
-        ))}
-      </CategoryFilter>
-
-      <PortfolioGrid>
-        {filteredItems.map((item, index) => (
-          <ScrollAnimation key={item.id} delay={index * 0.1}>
-            <PortfolioItem
-              onMouseEnter={() => setHoveredItem(item.id)}
-              onMouseLeave={() => setHoveredItem(null)}
-              onClick={() => setSelectedVideo(item)}
-            >
-              {hoveredItem === item.id ? (
-                <ReactPlayer
-                  url={item.videoUrl}
-                  playing
+              {hoveredId === item.id ? (
+                <Video
+                  src={item.video}
+                  autoPlay
                   muted
-                  width="100%"
-                  height="100%"
+                  playsInline
+                  loop
+                  disablePictureInPicture
+                  controls={false}
                 />
               ) : (
-                <ItemThumbnail src={item.thumbnail} alt={item.title} />
+                <Thumbnail
+                  src={item.thumbnail}
+                  alt={item.title}
+                  draggable={false}
+                />
               )}
-              <ItemOverlay>
-                <ItemTitle>{item.title}</ItemTitle>
-                <ItemDescription>{item.description}</ItemDescription>
-              </ItemOverlay>
-            </PortfolioItem>
-          </ScrollAnimation>
+            </VideoContainer>
+            <TextContent>
+              <ItemTitle>{item.title}</ItemTitle>
+              <ItemSubtitle>{item.subtitle}</ItemSubtitle>
+              <ItemDesc>{item.description}</ItemDesc>
+            </TextContent>
+          </PortfolioItem>
         ))}
-      </PortfolioGrid>
-
-      <ScrollAnimation delay={0.2}>
-        <LoadMoreButton>더 보기</LoadMoreButton>
-      </ScrollAnimation>
-
-      {selectedVideo && (
-        <VideoPopup>
-          <PopupContent>
-            <CloseButton onClick={() => setSelectedVideo(null)}>×</CloseButton>
-            <ReactPlayer
-              url={selectedVideo.videoUrl}
-              playing
-              controls
-              width="100%"
-              height="100%"
-            />
-          </PopupContent>
-        </VideoPopup>
-      )}
+      </FlexContainer>
     </SectionContainer>
   );
 };
 
 const SectionContainer = styled.section`
-  padding: 100px 20px;
+  padding: 100px 0;
   background: #000;
 `;
 
-const SectionTitle = styled.h2`
-  font-size: 3rem;
+const Title = styled.h2`
   text-align: center;
-  margin-bottom: 50px;
   color: white;
+  font-size: 3.8rem;
+  margin-bottom: 80px;
 `;
 
-const CategoryFilter = styled.div`
+const FlexContainer = styled.div`
   display: flex;
+  flex-direction: row;
   justify-content: center;
-  gap: 20px;
-  margin-bottom: 50px;
-  flex-wrap: wrap;
-`;
-
-const CategoryButton = styled.button`
-  padding: 10px 20px;
-  border: 2px solid
-    ${(props) => (props.isSelected ? "white" : "rgba(255,255,255,0.3)")};
-  background: transparent;
-  color: ${(props) => (props.isSelected ? "white" : "rgba(255,255,255,0.7)")};
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    border-color: white;
-    color: white;
-  }
-`;
-
-const PortfolioGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 30px;
-  margin-bottom: 50px;
+  gap: 48px;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 120px;
 `;
 
 const PortfolioItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  width: 260px;
+`;
+
+const VideoContainer = styled.div`
   position: relative;
   aspect-ratio: 16/9;
+  width: 100%;
+  max-width: 260px;
+  margin: 0 auto;
   overflow: hidden;
+  border-radius: 10px;
   cursor: pointer;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.18);
+  background: #18181c;
+  transition: transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  ${({ isHovered }) =>
+    isHovered &&
+    `
+    transform: scale(1.6);
+    z-index: 20;
+    box-shadow: 0 16px 64px 0 rgba(0,0,0,0.45);
+  `}
 
   &:hover {
-    transform: scale(1.02);
-    transition: transform 0.3s ease;
+    transform: scale(1.6);
+    z-index: 20;
+    box-shadow: 0 16px 64px 0 rgba(0, 0, 0, 0.45);
   }
 `;
 
-const ItemThumbnail = styled.img`
+const Video = styled.video`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+  background: #000;
 `;
 
-const ItemOverlay = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 20px;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-  color: white;
+const Thumbnail = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: #000;
+`;
+
+const TextContent = styled.div`
+  text-align: center;
+  padding: 0 6px;
 `;
 
 const ItemTitle = styled.h3`
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-`;
-
-const ItemDescription = styled.p`
-  font-size: 1rem;
-  opacity: 0.8;
-`;
-
-const LoadMoreButton = styled.button`
-  display: block;
-  margin: 0 auto;
-  padding: 15px 30px;
-  border: 2px solid white;
-  background: transparent;
   color: white;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: white;
-    color: black;
-  }
+  font-size: 1.3rem;
+  margin: 0 0 4px 0;
+  font-weight: 700;
 `;
 
-const VideoPopup = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+const ItemSubtitle = styled.p`
+  color: skyblue;
+  font-size: 0.95rem;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
 `;
 
-const PopupContent = styled.div`
-  position: relative;
-  width: 90%;
-  max-width: 1200px;
-  aspect-ratio: 16/9;
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: -40px;
-  right: 0;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 2rem;
-  cursor: pointer;
-  z-index: 1001;
+const ItemDesc = styled.p`
+  color: #bbb;
+  font-size: 0.8rem;
+  margin: 0;
+  line-height: 1.5;
 `;
 
 export default PortfolioSection;

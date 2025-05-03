@@ -1,33 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const offset = window.scrollY;
-      if (offset > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   return (
-    <Nav scrolled={scrolled}>
+    <Nav>
       <NavContainer>
-        <Logo>VIDEOGRAPH</Logo>
+        <Logo>KEANE</Logo>
         <NavLinks>
           <NavLink href="#portfolio">PORTFOLIO</NavLink>
           <NavLink href="#about">ABOUT</NavLink>
-          <NavLink href="#services">SERVICES</NavLink>
           <NavLink href="#contact">CONTACT</NavLink>
         </NavLinks>
       </NavContainer>
@@ -41,10 +22,7 @@ const Nav = styled.nav`
   left: 0;
   width: 100%;
   z-index: 100;
-  padding: 20px 0;
-  background: ${(props) =>
-    props.scrolled ? "rgba(0, 0, 0, 0.8)" : "transparent"};
-  transition: all 0.3s ease;
+  padding: 25px 0;
 `;
 
 const NavContainer = styled.div`
@@ -57,10 +35,10 @@ const NavContainer = styled.div`
 `;
 
 const Logo = styled.div`
+  font-size: 24px;
+  font-weight: bold;
   color: white;
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: 2px;
+  cursor: pointer;
 `;
 
 const NavLinks = styled.div`
@@ -73,7 +51,7 @@ const NavLink = styled.a`
   text-decoration: none;
   font-size: 16px;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: color 0.3s ease;
 
   &:hover {
     color: #cccccc;

@@ -11,3 +11,5 @@ yarn-debug.log*
 yarn-error.log*
 src/assets/videos/
 src/*.mp4
+src/assets/videos/
+src/assets/videos/
