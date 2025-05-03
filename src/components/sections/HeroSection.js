@@ -1,77 +1,103 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import video1 from "../../assets/videos/hero1.mp4";
 import video2 from "../../assets/videos/hero2.mp4";
 import video3 from "../../assets/videos/hero3.mp4";
 
-const videos = [video1, video2, video3];
-
 const HeroSection = () => {
-  const [current, setCurrent] = useState(0);
-  const videoRef = useRef(null);
+  const [currentVideo, setCurrentVideo] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const videos = [video1, video2, video3];
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setCurrent((prev) => (prev + 1) % videos.length);
+    const interval = setInterval(() => {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentVideo((prev) => (prev === videos.length - 1 ? 0 : prev + 1));
+        setIsTransitioning(false);
+      }, 300); // 1초에서 0.3초로 줄임
     }, 6000);
-    return () => clearTimeout(timer);
-  }, [current]);
-  const handleScrollDown = () => {
-    const portfolio = document.getElementById("portfolio");
-    if (portfolio) {
-      portfolio.scrollIntoView({ behavior: "smooth" });
+
+    return () => clearInterval(interval);
+  }, [videos.length]);
+
+  const scrollToPortfolio = () => {
+    const portfolioSection = document.getElementById("portfolio");
+    if (portfolioSection) {
+      portfolioSection.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   return (
-    <HeroContainer>
+    <SectionContainer>
       <VideoBackground>
-        <video
-          key={current}
-          ref={videoRef}
-          src={videos[current]}
-          autoPlay
-          muted
-          playsInline
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-        />
+        {videos.map((video, index) => (
+          <Video
+            key={index}
+            src={video}
+            autoPlay
+            muted
+            loop
+            playsInline
+            style={{
+              opacity:
+                index === 0
+                  ? 1
+                  : currentVideo === index
+                  ? isTransitioning
+                    ? 0
+                    : 1
+                  : 0,
+              transition: "opacity 0.3s ease-in-out", // 1초에서 0.3초로 줄임
+            }}
+          />
+        ))}
       </VideoBackground>
-      <ContentOverlay>
-        <HeroContent>
-          <Title>Visual Stories That Move</Title>
-          <Description>
-            당신의 이야기를 감동적인 영상으로 전달합니다
-          </Description>
-          <ButtonContainer>
-            <Button primary>포트폴리오 보기</Button>
-            <Button>문의하기</Button>
-          </ButtonContainer>
-        </HeroContent>
-        <ScrollIndicator onClick={handleScrollDown}>
+      <ContentWrapper>
+        <Content>
+          <Title>From Local Fields to Global Films</Title>
+          <SubTitle>
+            현장에서부터 완성된 영상까지, 당신의 이야기를 전 세계로.
+          </SubTitle>
+        </Content>
+        <ScrollDown onClick={scrollToPortfolio}>
           <ScrollText>Scroll Down</ScrollText>
           <ScrollIcon>↓</ScrollIcon>
-        </ScrollIndicator>
-      </ContentOverlay>
-    </HeroContainer>
+        </ScrollDown>
+      </ContentWrapper>
+    </SectionContainer>
   );
 };
-const HeroContainer = styled.section`
+
+// ... 나머지 styled components는 동일 ...
+
+const SectionContainer = styled.section`
   position: relative;
-  height: 100vh;
+  height: 85vh; // 90vh에서 85vh로 더 줄임
   width: 100%;
   overflow: hidden;
 `;
 
 const VideoBackground = styled.div`
   position: absolute;
-  top: 80;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   z-index: 1;
 `;
 
-const ContentOverlay = styled.div`
+const Video = styled.video`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+const ContentWrapper = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -81,18 +107,21 @@ const ContentOverlay = styled.div`
   z-index: 2;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between; // 변경: space-between으로 하여 컨텐츠와 스크롤 버튼 사이 간격 조정
   align-items: center;
+  padding: 100px 0 60px 0; // 상단과 하단 패딩 추가
 `;
 
-const HeroContent = styled.div`
+const Content = styled.div`
   text-align: center;
   color: white;
-  max-width: 800px;
+  max-width: 1000px;
   padding: 0 20px;
+  margin-top: auto; // 컨텐츠를 위쪽으로 밀어올림
 `;
+
 const Title = styled.h1`
-  font-size: 4rem;
+  font-size: 3.5rem;
   margin-bottom: 20px;
   font-weight: bold;
 
@@ -101,7 +130,7 @@ const Title = styled.h1`
   }
 `;
 
-const Description = styled.p`
+const SubTitle = styled.p`
   font-size: 1.5rem;
   margin-bottom: 40px;
 
@@ -109,40 +138,38 @@ const Description = styled.p`
     font-size: 1.2rem;
   }
 `;
-const ButtonContainer = styled.div`
-  display: flex;
-  gap: 20px;
-  justify-content: center;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
-`;
-
-const Button = styled.button`
-  padding: 15px 30px;
-  font-size: 1.1rem;
-  border: 2px solid white;
-  background: ${(props) => (props.primary ? "white" : "transparent")};
-  color: ${(props) => (props.primary ? "black" : "white")};
-  cursor: pointer;
-  transition: all 0.3s ease;
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  }
-`;
-
-const ScrollIndicator = styled.div`
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+const ScrollDown = styled.div`
+  position: relative; // absolute에서 relative로 변경
   text-align: center;
   color: white;
   animation: bounce 2s infinite;
   cursor: pointer;
+  transition: transform 0.3s ease;
+  margin-top: auto; // 하단에 붙임
+  padding-bottom: 20px; // 하단 여백 추가
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  @keyframes bounce {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-30px);
+    }
+    60% {
+      transform: translateY(-15px);
+    }
+  }
 `;
+
 const ScrollText = styled.p`
   font-size: 0.9rem;
   margin-bottom: 10px;
