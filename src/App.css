@@ -1,28 +1,6 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-* {
-  cursor: none !important;
-}
-
-@media (max-width: 768px) {
-  * {
-    cursor: auto !important;
-  }
-}
-
-body {
-  font-family: "Noto Sans KR", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  color: #fff;
-  background: #000;
-}
-z .App {
-  min-height: 100vh;
-  width: 100%;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { color: #fff; background: #000; font-family: "Noto Sans KR", sans-serif; -webkit-font-smoothing: antialiased; }
+.App { min-height: 100vh; width: 100%; overflow-x: hidden; }
+button, input, select, textarea { font: inherit; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
