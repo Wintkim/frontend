@@ -11,17 +11,17 @@ export default function HeroSection() {
       <Inner>
         <Copy>
           <Tag><span /> HAMBURG · GERMANY / EUROPE</Tag>
-          <h1>독일·유럽 촬영,<br /><strong>현지에 움직일 사람이</strong><br />필요할 때</h1>
+          <h1>독일·유럽 촬영 코디 /<br /><strong>현지 촬영 대행 / 방송 제작 지원</strong></h1>
           <Description>
-            함부르크 기반 한국인 프로듀서가 방송·다큐·브랜드·기업 촬영을 위한 현지 코디네이션,
-            섭외, 통역, 직접 촬영과 영상 제작까지 함께 지원합니다.
+            KYEFILM은 독일 함부르크를 기반으로 한국 방송사, 제작사, 기업, 브랜드의 독일·유럽 현지 촬영을 지원합니다.
+            방송 리포트, 다큐, 기업 홍보영상, 인터뷰, 로케이션 헌팅까지 현지 실행과 현장 운영을 함께 맡아드립니다.
           </Description>
           <TrustBadges aria-label="KYEFILM 신뢰 정보">
             {["KBS", "YTN", "MBC", "MCM", "HAMBURG-BASED", "KO · EN · DE"].map((badge) => <span key={badge}>{badge}</span>)}
           </TrustBadges>
 
           <Actions>
-            <Primary href="#contact">촬영·코디 문의하기 <span>↘</span></Primary>
+            <Primary href="#contact">독일·유럽 촬영 문의하기 <span>↘</span></Primary>
             <PortfolioLink href="#portfolio">포트폴리오 보기 <span>→</span></PortfolioLink>
           </Actions>
         </Copy>
